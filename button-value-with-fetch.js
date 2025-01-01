@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ value: value }),
+      body: JSON.stringify({ value }),
     })
       .then(({ ok, statusText, json }) => {
         if (!ok) {
@@ -45,10 +45,13 @@ document.addEventListener("DOMContentLoaded", function () {
   const startEvents = ["mousedown", "touchstart"];
   const stopEvents = ["mouseup", "touchend", "mouseleave"];
 
+  const addEventListener = (element, event, callbackFunction) =>
+    element.addEventListener(event, callbackFunction);
+
   startEvents.forEach((event) =>
-    holdButton.addEventListener(event, startSendingValue)
+    addEventListener(holdButton, event, startSendingValue)
   );
   stopEvents.forEach((event) =>
-    holdButton.addEventListener(event, stopSendingValue)
+    addEventListener(holdButton, event, stopSendingValue)
   );
 });
