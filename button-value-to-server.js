@@ -10,12 +10,12 @@ $(document).ready(function () {
       success: function (response) {
         console.log("Value sent to server:", value, response);
       },
-      error: function (jqXHR, textStatus, errorThrown) {
+      error: function (_, textStatus, errorThrown) {
         console.log(
           "Error sending value to server:",
+          value,
           textStatus,
-          errorThrown,
-          jqXHR
+          errorThrown
         );
       },
     });
