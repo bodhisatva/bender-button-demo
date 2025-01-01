@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   let interval;
   let value = 0;
+  const getElementById = (elementId) => document.getElementById(elementId);
 
   function sendValue() {
     fetch("/server-endpoint-here", {
@@ -10,23 +11,25 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       body: JSON.stringify({ value: value }),
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok " + response.statusText);
+      .then(({ ok, statusText, json }) => {
+        if (!ok) {
+          throw new Error(`Network response was not ok ${statusText}`);
         }
-        return response.json();
+        return json();
       })
       .then((data) => {
-        console.log("Value sent to server:", value, data);
+        console.log(`Value sent to server: ${value}, ${data}`);
       })
       .catch((error) => {
-        console.log("Error sending value to server:", value, error);
+        console.log(
+          `Error sending value to server: ${value}, ${error.message}`
+        );
       });
   }
 
   function startSendingValue() {
     value = 1;
-    document.getElementById("value").textContent = value;
+    getElementById("value").textContent = value;
     sendValue();
     interval = setInterval(sendValue, 10);
   }
@@ -34,11 +37,11 @@ document.addEventListener("DOMContentLoaded", function () {
   function stopSendingValue() {
     clearInterval(interval);
     value = 0;
-    document.getElementById("value").textContent = value;
+    getElementById("value").textContent = value;
     sendValue();
   }
 
-  const holdButton = document.getElementById("holdButton");
+  const holdButton = getElementById("holdButton");
   const startEvents = ["mousedown", "touchstart"];
   const stopEvents = ["mouseup", "touchend", "mouseleave"];
 
