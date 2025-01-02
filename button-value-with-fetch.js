@@ -3,28 +3,27 @@ document.addEventListener("DOMContentLoaded", function () {
   let value = 0;
   const getElementById = (elementId) => document.getElementById(elementId);
 
-  function sendValue() {
-    fetch("/server-endpoint-here", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ value }),
-    })
-      .then(({ ok, statusText, json }) => {
-        if (!ok) {
-          throw new Error(`Network response was not ok ${statusText}`);
-        }
-        return json();
-      })
-      .then((data) => {
-        console.log(`Value sent to server: ${value}, ${data}`);
-      })
-      .catch((error) => {
-        console.log(
-          `Error sending value to server: ${value}, ${error.message}`
-        );
-      });
+  const headers = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ value }),
+  };
+
+  async function sendValue() {
+    try {
+      const { ok, statusText } = await fetch("/server-endpoint-here", headers);
+
+      if (!ok) {
+        throw new Error(`Network response was not ok ${statusText}`);
+      }
+
+      const data = await response.json();
+      console.log(`Value sent to server: ${value}, ${data}`);
+    } catch (error) {
+      console.log(`Error sending value to server: ${value}, ${error.message}`);
+    }
   }
 
   function startSendingValue() {
